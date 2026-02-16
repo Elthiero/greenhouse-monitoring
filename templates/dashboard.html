@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div id="dashboardPage" class="page-container active">
+        <div class="container-fluid py-4">
+            <div class="dashboard-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="mb-0"><i class="fas fa-chart-line chart-icon"></i> Real-Time Monitoring</h2>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
+                        </span>
+                        <span class="last-update">
+                            <i class="fas fa-clock"></i>
+                            <span id="lastUpdateTime">--:--:--</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="chart-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <label for="zoneSelect" class="form-label">
+                                    <i class="fas fa-location-dot chart-icon"></i> Select Zone
+                                </label>
+                                <select class="form-select zone-selector" id="zoneSelect">
+                                    <option value="all">All Zones</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="chart-card">
+                        <h5>
+                            <i class="fas fa-temperature-high chart-icon"></i>
+                            Temperature Over Time
+                        </h5>
+                        <canvas id="temperatureChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                    <div class="chart-card">
+                        <h5>
+                            <i class="fas fa-droplet chart-icon"></i>
+                            Humidity Trends
+                        </h5>
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                    <div class="chart-card">
+                        <h5>
+                            <i class="fas fa-seedling chart-icon"></i>
+                            Soil Moisture Comparison
+                        </h5>
+                        <canvas id="soilMoistureChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                    <div class="chart-card">
+                        <h5>
+                            <i class="fas fa-bell chart-icon"></i>
+                            Alerts Count Per Day
+                        </h5>
+                        <canvas id="alertsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock extra_js %}

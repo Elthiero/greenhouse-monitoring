@@ -1,0 +1,64 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/logs.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+
+<div class="container-fluid py-4">
+            <div class="dashboard-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="mb-0"><i class="fas fa-clipboard-list chart-icon"></i> Live Sensor Logs</h2>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE
+                        </span>
+                        <span class="last-update">
+                            <i class="fas fa-clock"></i>
+                            <span id="logsLastUpdate">--:--:--</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="logZoneFilter" class="form-label">
+                        <i class="fas fa-filter chart-icon"></i> Filter by Zone
+                    </label>
+                    <select class="form-select" id="logZoneFilter" onchange="filterLogs()">
+                        <option value="all">All Zones</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="zone-table-card">
+                <div class="log-table-container">
+                    <table class="table table-hover table-striped">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Zone Name</th>
+                                <th>Temperature (°C)</th>
+                                <th>Humidity (%)</th>
+                                <th>Soil Moisture (%)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+{% block extra_js %}
+<script src="{% static 'js/logs-ajax.js' %}"></script>
+{% endblock extra_js %}
+{% endblock %}

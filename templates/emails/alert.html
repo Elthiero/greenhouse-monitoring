@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenhouse Alert</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .email-container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .header { background: linear-gradient(135deg, #dc3545 0%, #a71d2a 100%); color: #ffffff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .alert-icon { font-size: 48px; margin-bottom: 10px; }
+        .content { padding: 30px 20px; }
+        .zone-name { font-size: 20px; color: #333; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid #f4f4f4; padding-bottom: 10px; }
+        .alert-box { background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 12px; margin-bottom: 10px; border-radius: 4px; }
+        .alert-box p { margin: 0; color: #721c24; font-size: 14px; }
+        
+        /* Metrics Grid using Tables for Email Client Compatibility */
+        .metrics-table { width: 100%; margin-top: 25px; border-collapse: collapse; }
+        .metric-cell { width: 33.33%; padding: 15px; text-align: center; border: 1px solid #e0e0e0; }
+        .metric-label { font-size: 11px; color: #666; text-transform: uppercase; font-weight: bold; }
+        .metric-value { font-size: 22px; font-weight: bold; margin: 5px 0; }
+        
+        /* Status Colors */
+        .critical { color: #dc3545; }
+        .normal { color: #28a745; }
+        
+        .timestamp { text-align: center; padding: 20px; background-color: #f8f9fa; color: #666; font-size: 13px; margin-top: 20px; }
+        .footer { background-color: #343a40; color: #ffffff; text-align: center; padding: 20px; font-size: 12px; }
+        .footer a { color: #ffffff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="alert-icon">🚨</div>
+            <h1>Critical Threshold Alert</h1>
+        </div>
+
+        <div class="content">
+            <div class="zone-name">📍 Zone: {{ zone_name }}</div>
+
+            <!-- Alert List -->
+            {% for alert in alerts %}
+            <div class="alert-box">
+                <p><strong>⚠️ ALERT:</strong> {{ alert }}</p>
+            </div>
+            {% endfor %}
+
+            <!-- Comparison Table -->
+            <table class="metrics-table">
+                <tr>
+                    <!-- Temperature -->
+                    <td class="metric-cell">
+                        <div class="metric-label">Temperature</div>
+                        <div class="metric-value {% if readings.temp > thresholds.max_temp or readings.temp < thresholds.min_temp %}critical{% else %}normal{% endif %}">
+                            {{ readings.temp|floatformat:1 }}°C
+                        </div>
+                    </td>
+                    <!-- Humidity -->
+                    <td class="metric-cell">
+                        <div class="metric-label">Humidity</div>
+                        <div class="metric-value {% if readings.humidity > thresholds.max_humidity or readings.humidity < thresholds.min_humidity %}critical{% else %}normal{% endif %}">
+                            {{ readings.humidity|floatformat:1 }}%
+                        </div>
+                    </td>
+                    <!-- Soil Moisture -->
+                    <td class="metric-cell">
+                        <div class="metric-label">Moisture</div>
+                        <div class="metric-value {% if readings.moisture > thresholds.max_moisture or readings.moisture < thresholds.min_moisture %}critical{% else %}normal{% endif %}">
+                            {{ readings.moisture|floatformat:1 }}%
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="timestamp">
+                <strong>Recorded at:</strong> {{ timestamp|date:"F j, Y, g:i a" }}<br>
+                <small>Thresholds: T({{thresholds.min_temp}}-{{thresholds.max_temp}}) | H({{thresholds.min_humidity}}-{{thresholds.max_humidity}}) | M({{thresholds.min_moisture}}-{{thresholds.max_moisture}})</small>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Automated message from Greenhouse Monitoring System.</p>
+            <p><a href="{{ dashboard_url }}">Access Dashboard</a></p>
+        </div>
+    </div>
+</body>
+</html>
